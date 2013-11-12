@@ -33,6 +33,7 @@
 
 - (NSURL *)fullURL;
 - (NSURL *)fullURLWithEscape;
+- (NSString *)fullPath;
 - (void)start;
 - (void)cancelRequest;
 

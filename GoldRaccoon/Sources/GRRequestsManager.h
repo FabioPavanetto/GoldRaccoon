@@ -11,22 +11,26 @@
 
 #import "GRRequestsManagerProtocol.h"
 
+#define kNMFTPFileName      @"kNMFTPFileName"
+#define kNMFTPisDirectory   @"kNMFTPisDirectory"
+#define kNMFTPFullPath   @"kNMFTPFullPath"
+
 /**
  Instances of this class manage a queue of requests against an FTP server.
  The different request types are:
  
-  * list directory
-  * create directory
-  * delete directory
-  * delete file
-  * upload file
-  * download file
+ * list directory
+ * create directory
+ * delete directory
+ * delete file
+ * upload file
+ * download file
  
  As soon as the requests are submitted to the GRRequestsManager, they are queued in a FIFO queue.
  The FTP Manager must be started with the startProcessingRequests method and can be shut down with the stopAndCancelAllRequests method.
  When processed, the requests are executed one at a time (max concurrency = 1).
  When no more requests are in the queue the GRRequestsManager automatically shut down.
-*/
+ */
 @interface GRRequestsManager : NSObject <GRRequestsManagerProtocol>
 
 /**

@@ -17,7 +17,7 @@
 
 @implementation GRStreamInfo
 
-@synthesize writeStream;    
+@synthesize writeStream;
 @synthesize readStream;
 @synthesize bytesThisIteration;
 @synthesize bytesTotal;
@@ -50,6 +50,9 @@ dispatch_queue_t dispatch_get_local_queue()
         [request.streamInfo close: request];
         return;
     }
+    
+    
+    NSLog(@"%@",request.fullURL);
     
     // a little bit of C because I was not able to make NSInputStream play nice
     CFReadStreamRef readStreamRef = CFReadStreamCreateWithFTPURL(NULL, ( __bridge CFURLRef) request.fullURL);
@@ -157,7 +160,7 @@ dispatch_queue_t dispatch_get_local_queue()
 {
     NSData *data;
     NSMutableData *bufferObject = [NSMutableData dataWithLength:kGRDefaultBufferSize];
-
+    
     bytesThisIteration = [readStream read:(UInt8 *)[bufferObject bytes] maxLength:kGRDefaultBufferSize];
     bytesTotal += bytesThisIteration;
     
@@ -188,7 +191,7 @@ dispatch_queue_t dispatch_get_local_queue()
 {
     bytesThisIteration = [writeStream write:[data bytes] maxLength:[data length]];
     bytesTotal += bytesThisIteration;
-            
+    
     if (bytesThisIteration > 0) {
         request.percentCompleted = bytesTotal / request.maximumSize;
         if ([request.delegate respondsToSelector:@selector(percentCompleted:forRequest:)]) {
@@ -204,7 +207,7 @@ dispatch_queue_t dispatch_get_local_queue()
     
     [self streamError: request errorCode:kGRFTPClientCantWriteStream]; // perform callbacks and close out streams
     NSLog(@"%@", request.error.message);
-
+    
     return NO;
 }
 

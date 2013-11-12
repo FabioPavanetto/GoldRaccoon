@@ -81,18 +81,18 @@
                 [self.streamInfo streamError:self errorCode:kGRFTPClientCantReadStream];
             }
         }
-        break;
+            break;
             
         case NSStreamEventHasSpaceAvailable: {
             
-        } 
-        break;
+        }
+            break;
             
         case NSStreamEventErrorOccurred: {
             [self.streamInfo streamError:self errorCode:[GRError errorCodeWithError:[theStream streamError]]];
             NSLog(@"%@", self.error.message);
         }
-        break;
+            break;
             
         case NSStreamEventEndEncountered: {
             NSUInteger  offset = 0;
@@ -113,8 +113,8 @@
             
             [self.streamInfo streamComplete:self];
         }
-        break;
-        
+            break;
+            
         default:
             break;
     }

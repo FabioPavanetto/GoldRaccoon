@@ -50,6 +50,12 @@
 
 #pragma mark - GRRequestProtocol
 
+- (NSString *)fullPath
+{
+    NSString *path = [self.path hasPrefix:@"/"] ? [self.path substringFromIndex:1] : self.path;
+    return [path stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+}
+
 - (NSURL *)fullURL
 {
     NSString *hostname = [self.dataSource hostnameForRequest:self];
@@ -58,7 +64,7 @@
         hostname = [hostname substringFromIndex:6];
     }
     NSString *path = [self.path hasPrefix:@"/"] ? [self.path substringFromIndex:1] : self.path;
-    NSString *fullURLString = [NSString stringWithFormat:@"%@%@/%@", ftpPrefix, hostname, path];
+    NSString *fullURLString = [[NSString stringWithFormat:@"%@%@/%@", ftpPrefix, hostname, path] stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
     return [NSURL URLWithString:fullURLString];
     
 }
@@ -88,7 +94,7 @@
         hostname = [hostname substringFromIndex:6];
     }
     NSString *path = [self.path hasPrefix:@"/"] ? [self.path substringFromIndex:1] : self.path;
-    NSString *fullURLString = [NSString stringWithFormat:@"%@%@%@/%@", ftpPrefix, cred, hostname, path];
+    NSString *fullURLString = [[NSString stringWithFormat:@"%@%@%@/%@", ftpPrefix, cred, hostname, path] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     return [NSURL URLWithString:fullURLString];
 }
 
@@ -123,7 +129,7 @@
                                                                                                  (CFStringRef)@"!*'\"();:@&=+$,?%#[]% ",
                                                                                                  kCFStringEncodingUTF8);
     return urlEncoded;
-}  
+}
 
 - (void)start
 {

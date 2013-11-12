@@ -141,13 +141,27 @@
 
 #pragma mark - GRRequestDelegate required
 
+
+-(NSNumber*) isDirectory:(NSDictionary*)file{
+    if ([[file objectForKey:(id)kCFFTPResourceType] intValue] == 4){
+        return [NSNumber numberWithBool:YES];
+    }else{
+        return [NSNumber numberWithBool:NO];
+    }
+}
+
 - (void)requestCompleted:(GRRequest *)request
 {
     // listing request
     if ([request isKindOfClass:[GRListingRequest class]]) {
         NSMutableArray *listing = [NSMutableArray array];
         for (NSDictionary *file in ((GRListingRequest *)request).filesInfo) {
-            [listing addObject:[file objectForKey:(id)kCFFTPResourceName]];
+            [listing addObject:[NSDictionary dictionaryWithObjectsAndKeys:
+                                [file objectForKey:(id)kCFFTPResourceName],kNMFTPFileName,
+                                [self isDirectory:file],kNMFTPisDirectory,
+                                request.fullPath,kNMFTPFullPath,
+                                nil
+                                ]];
         }
         if ([self.delegate respondsToSelector:@selector(requestsManager:didCompleteListingRequest:listing:)]) {
             [self.delegate requestsManager:self
@@ -162,14 +176,14 @@
             [self.delegate requestsManager:self didCompleteCreateDirectoryRequest:(GRUploadRequest *)request];
         }
     }
-
+    
     // delete request
     if ([request isKindOfClass:[GRDeleteRequest class]]) {
         if ([self.delegate respondsToSelector:@selector(requestsManager:didCompleteDeleteRequest:)]) {
             [self.delegate requestsManager:self didCompleteDeleteRequest:(GRUploadRequest *)request];
         }
     }
-
+    
     // upload request
     if ([request isKindOfClass:[GRUploadRequest class]]) {
         if ([self.delegate respondsToSelector:@selector(requestsManager:didCompleteUploadRequest:)]) {

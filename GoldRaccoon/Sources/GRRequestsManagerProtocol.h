@@ -97,7 +97,7 @@
  */
 @property (nonatomic, copy) NSString *hostname;
 
-/** 
+/**
  @brief Add a request to the manager for listing a directory at a given path.
  @param path The path of the directory to list.
  @return The created request, conforming to GRRequestProtocol.
